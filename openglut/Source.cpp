@@ -21,7 +21,7 @@ void display(void)
 	glFlush();//forces or guarantees the commands made up to that point wil complete exceutions in a finite amount of time
 }
 
-int main(int argc, char** argv)
+int main(int argc, char** argv) 
 {
 	printf("hello world\n");
 	glutInit(&argc, argv);//initializes  the glut library and process any command line options related to the glut
