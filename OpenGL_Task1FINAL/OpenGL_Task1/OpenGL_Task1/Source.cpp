@@ -1,5 +1,14 @@
 #include<GL/glut.h>
 #include<Windows.h>
+#include <stdio.h>
+#include <math.h>
+#include <errno.h>
+#include <fenv.h>
+#include <cmath>
+
+#define _USE_MATH_DEFINES
+#define M_PI 3.14159265358979323846
+
 
 void init() {
 	//window
@@ -9,9 +18,26 @@ void init() {
 	//2D-Transform
 	gluOrtho2D(0.0, 800, 0.0, 600);
 }
+void circle(GLfloat rx, GLfloat ry, GLfloat cx, GLfloat cy) {
+	glBegin(GL_TRIANGLE_FAN);
+	for (int i = 0; i <= 100; i++) {
+		float angle = 2 * 3.1416 * i / 100;
+		float x = rx * cosf(angle);
+		float y = ry * sinf(angle);
+		glVertex2f(x + cx, y + cy);
+
+	}
+	glEnd();
+}
+void Moon()
+{
+	glutSolidSphere(.5, 10, 10);
+}
 
 void home()
 {
+	//circle
+	
 	//roof of hse
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -130,6 +156,7 @@ int main(int argc, char** argv) {
 	init();
 	//graphics to display
 	glutDisplayFunc(home);
+	
 	
 	glutMainLoop();
 
