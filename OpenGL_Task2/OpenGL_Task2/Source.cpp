@@ -126,7 +126,31 @@ void house() {
 	glVertex3f(-0.1, -0.8, 0);
 	glEnd();
 
+	//
+	// First  Circle
+	glColor3ub(255, 255, 0); // yellow background
+	float i = 0.05f;
+	float r = 0.090f;
+	float o = 0.6f;
+	float x = 0.75f;
+	glBegin(GL_TRIANGLE_FAN);
+	for (i = 0.0f; i <= 360; i++)
+		glVertex2f(r * cos(3.14 * i / 180.0) + x, r * sin(3.14 * i / 180.0) + o);
 
+	glEnd();
+
+
+	// Second  Circle
+	glColor3f(1, 1, 1);  //black background
+	float p = 0.05f;
+	float q = 0.10f;
+	float z = 0.6f;
+	float l = 0.79f;
+	glBegin(GL_TRIANGLE_FAN);
+	for (p = 0.0f; p <= 360; p++)
+		glVertex2f(r * cos(3.14 * p / 180.0) + l, q * sin(3.14 * p / 180.0) + z);
+
+	glEnd();
 
 }
 
