@@ -11,6 +11,7 @@ sf::Texture arrayOfTexture[13];
 bool playerMovingRight = false;
 bool playerMovingLeft = false;
 bool playerMovingUp = false;
+bool playerMovingdown = false;
 int currentFrame = 1;
 float duration = float();
 
@@ -52,7 +53,7 @@ void draw() {
 void updateInput() {
 
 	sf::Event event;
-
+	
 	while (window.pollEvent(event)) {
 
 		if (event.type == sf::Event::KeyPressed) {
@@ -66,6 +67,7 @@ void updateInput() {
 			if (event.key.code == sf::Keyboard::Up) {
 				playerMovingUp = true;
 			}
+
 		}
 		if (event.type == sf::Event::KeyReleased) {
 
@@ -124,6 +126,7 @@ int main() {
 
 		if (duration > 0.1f)
 		{
+			duration = 0;
 			if (currentFrame < 8 && playerMovingRight) {
 				currentFrame += 1;
 			}
