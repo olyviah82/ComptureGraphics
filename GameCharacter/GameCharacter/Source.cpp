@@ -1,114 +1,158 @@
 #include "SFML-2.5.1\include\SFML\Graphics.hpp"
-#define         SPRITE_SPEED        1
-#define _USE_MATH_DEFINES
-#include <cmath> 
 
 sf::Vector2f viewSize(1030, 890);
 sf::VideoMode vm(viewSize.x, viewSize.y);
-sf::RenderWindow window(vm, "Hello Kira: 5", sf::Style::Default);
+sf::RenderWindow window(vm, "Hello Kira", sf::Style::Default);
 sf::Texture bkgTexture;
 sf::Sprite bkgSprite;
-sf::Texture heroTexture;
-sf::Sprite heroSprite;
-// Sprite speed (high values = high speed)
+sf::Sprite imageofKira;
+sf::Vector2f playerPosition;
+sf::Texture arrayOfTexture[13];
+bool playerMovingRight = false;
+bool playerMovingLeft = false;
+bool playerMovingUp = false;
+int currentFrame = 1;
+float duration = float();
 
-// Flags for key pressed
-bool upFlag = false;
-bool downFlag = false;
-bool leftFlag = false;
-bool rightFlag = false;
-//
- // Sprite coordinates
-int x = window.getSize().x / 2.;
-int y = window.getSize().y / 2.;
+
 
 
 void init()
 {
 	bkgTexture.loadFromFile("Assets/Graphics/background5.png");
 	bkgSprite.setTexture(bkgTexture);
-	heroTexture.loadFromFile("Assets/Graphics/Animations/monkey_idle.png");
-	heroSprite.setTexture(heroTexture);
-	heroSprite.setPosition(sf::Vector2f(viewSize.x / 1.8, viewSize.y / 1.8));
-	heroSprite.setOrigin(heroTexture.getSize().x / 2, heroTexture.getSize().y / 2);
-//
+
 	
+	arrayOfTexture[0].loadFromFile("Assets/Graphics/Animations/monkey_idle.png");
+	arrayOfTexture[1].loadFromFile("Assets/Graphics/Animations/monkey_run_1.png");
+	arrayOfTexture[2].loadFromFile("Assets/Graphics/Animations/monkey_run_2.png");
+	arrayOfTexture[3].loadFromFile("Assets/Graphics/Animations/monkey_run_3.png");
+	arrayOfTexture[4].loadFromFile("Assets/Graphics/Animations/monkey_run_4.png");
+	arrayOfTexture[5].loadFromFile("Assets/Graphics/Animations/monkey_run_5.png");
+	arrayOfTexture[6].loadFromFile("Assets/Graphics/Animations/monkey_run_6.png");
+	arrayOfTexture[7].loadFromFile("Assets/Graphics/Animations/monkey_run_7.png");
+	arrayOfTexture[8].loadFromFile("Assets/Graphics/Animations/monkey_run_8.png");
+	arrayOfTexture[9].loadFromFile("Assets/Graphics/Animations/monkey_jump_1.png");
+	arrayOfTexture[10].loadFromFile("Assets/Graphics/Animations/monkey_jump_2.png");
+	arrayOfTexture[11].loadFromFile("Assets/Graphics/Animations/monkey_jump_3.png");
+	arrayOfTexture[12].loadFromFile("Assets/Graphics/Animations/monkey_jump_4.png");
+
+	
+	imageofKira.setTexture(arrayOfTexture[0]);
+	imageofKira.setPosition(sf::Vector2f(viewSize.x / 1.8, viewSize.y / 1.8));
+	imageofKira.setOrigin(arrayOfTexture[0].getSize().x / 2, arrayOfTexture[0].getSize().y / 2);
 }
+
 
 void draw() {
 	window.draw(bkgSprite);
-	window.draw(heroSprite);
+	window.draw(imageofKira);
+}
+
+void updateInput() {
+
+	sf::Event event;
+
+	while (window.pollEvent(event)) {
+
+		if (event.type == sf::Event::KeyPressed) {
+			
+			if (event.key.code == sf::Keyboard::Right) {
+				playerMovingRight = true;
+			}
+			if (event.key.code == sf::Keyboard::Left) {
+				playerMovingLeft = true;
+			}
+			if (event.key.code == sf::Keyboard::Up) {
+				playerMovingUp = true;
+			}
+		}
+		if (event.type == sf::Event::KeyReleased) {
+
+			if (event.key.code == sf::Keyboard::Right) {
+				playerMovingRight = false;
+			}
+			if (event.key.code == sf::Keyboard::Left) {
+				playerMovingLeft = false;
+			}
+			if (event.key.code == sf::Keyboard::Up) {
+				playerMovingUp = false;
+			}
+		}
+		if (event.key.code == sf::Keyboard::Escape || event.type == sf::Event::Closed) {
+			window.close();
+		}
+
+		
+	
+	}
+}
+
+void update(sf::Time deltaTime) {
+
+	sf::Vector2f movement(0.0f, 0.0f);
+	if (playerMovingRight) {
+		movement.x += 50.f;
+	}
+	if (playerMovingLeft) {
+		movement.x -= 50.f;
+	}
+	if (playerMovingUp) {
+		movement.y -= 50.f;
+	}
+
+	imageofKira.move(movement * deltaTime.asSeconds());
 }
 
 int main() {
+
+	sf::Clock clock;
+
+	
 	init();
-	sf::Clock timer;
+
 	while (window.isOpen()) {
-		// Process events
-		sf::Event event;
+
+		sf::Time deltaTime = clock.restart();
+		duration += deltaTime.asSeconds();
+
+		update(deltaTime);
+		
+		updateInput();
+
+		
+
+		if (duration > 0.1f)
+		{
+			if (currentFrame < 8 && playerMovingRight) {
+				currentFrame += 1;
+			}
+			else if (currentFrame > 8 && playerMovingRight) {
+				currentFrame = 0;
+			}
+			else if (currentFrame < 8 && playerMovingLeft) {
+				currentFrame += 1;
+			}
+			else if (currentFrame > 8 && playerMovingLeft) {
+				currentFrame = 0;
+			}
+			else if (currentFrame < 9 && playerMovingUp) {
+				currentFrame += 1;
+			}
+			else if (currentFrame < 9 && playerMovingUp) {
+				currentFrame = 0;
+			}
+			else {
+				currentFrame = 0;
+			}
+			imageofKira.setTexture(arrayOfTexture[currentFrame]);
+		}
 
 		window.clear(sf::Color::White);
 		draw();
-
 		window.display();
 
-		//
-		while (window.pollEvent(event))
-		{
-			// Close the window if a key is pressed or if requested
-			if (event.type == sf::Event::Closed) window.close();
-
-			// If a key is pressed
-			if (event.type == sf::Event::KeyPressed)
-			{
-				switch (event.key.code)
-				{
-					// If escape is pressed, close the application
-				case  sf::Keyboard::Escape: window.close(); break;
-
-					// Process the up, down, left and right keys
-				case sf::Keyboard::Up:     upFlag = true; break;
-				case sf::Keyboard::Down:    downFlag = true; break;
-				case sf::Keyboard::Left:    leftFlag = true; break;
-				case sf::Keyboard::Right:   rightFlag = true; break;
-				default: break;
-				}
-			}
-			// If a key is released
-			if (event.type == sf::Event::KeyReleased)
-			{
-				switch (event.key.code)
-				{
-					// Process the up, down, left and right keys
-				case sf::Keyboard::Up:     upFlag = false; break;
-				case sf::Keyboard::Down:    downFlag = false; break;
-				case sf::Keyboard::Left:    leftFlag = false; break;
-				case sf::Keyboard::Right:   rightFlag = false; break;
-				default: break;
-				}
-			}
-		}
-		// Update coordinates
-		if (leftFlag) x -= SPRITE_SPEED;
-		if (rightFlag) x += SPRITE_SPEED;
-		if (upFlag) y -= SPRITE_SPEED;
-		if (downFlag) y += SPRITE_SPEED;
-
-		// Check screen boundaries
-		if (x < 0) x = 0;
-		if (x > (int)window.getSize().x) x = window.getSize().x;
-		if (y < 0) y = 0;
-		if (y > (int)window.getSize().y) y = window.getSize().y;
-		// Rotate and draw the sprite
-		heroSprite.setPosition(x, y);
-		//heroSprite.setRotation(timer.getElapsedTime().asSeconds() / 3.141592 * 90.f);
-		window.draw(heroSprite);
-		//
-		
-
 	}
-	//animation movement 
-
 	
 	return 0;
 }
