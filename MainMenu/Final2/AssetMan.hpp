@@ -4,8 +4,8 @@
 #include <memory>
 #include <string>
 
-#include <SFML-2.5.1\include\SFML\Graphics\Texture.hpp>
-#include <SFML-2.5.1\include\SFML\Graphics\Font.hpp>
+#include "SFML-2.5.1\include\SFML\Graphics\Texture.hpp"
+#include "SFML-2.5.1\include\SFML\Graphics\Font.hpp"
 
 
 namespace Engine 

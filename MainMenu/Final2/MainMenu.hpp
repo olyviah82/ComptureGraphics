@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <SFML-2.5.1\include\SFML\Graphics\Text.hpp>
+#include "SFML-2.5.1\include\SFML\Graphics\Text.hpp"
 
 #include "State.hpp"
 #include "Game.hpp"
